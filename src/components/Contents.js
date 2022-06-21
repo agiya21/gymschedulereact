@@ -1,8 +1,16 @@
 import React from "react"
-import DayCard from './DayCard'
-import { Button } from 'react-bootstrap'
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
+import {
+    BrowserRouter as Router,
+    Routes,
+    Route,
+    Link
+} from 'react-router-dom'
 import ScheduleCard from "./ScheduleCard"
+import DayCard from "./DayCard"
+
+/**@jsxRuntime classic */
+/**@jsx jsx */
+import { jsx, css } from '@emotion/react'
 
 class Contents extends React.Component {
     constructor() {
@@ -13,13 +21,14 @@ class Contents extends React.Component {
         }
     }
 
+    /** Fetch API data with POST Request */
     componentDidMount() {
         this.setState({ isLoading: true })
         const bodyRequest = {
             selectedClub: 'FIT HUB ARTERI PONDOK INDAH',
             selectedCategory: 'ALL',
             dateFrom: '2022-05-10',
-            dateTo: '2022-05-11'
+            dateTo: '2022-05-17'
         }
         const requestOption = {
             method: 'POST',
@@ -36,39 +45,48 @@ class Contents extends React.Component {
 
     render() {
         const { isLoading, dataSchedule } = this.state
-        const dataTanggal = Object.keys(dataSchedule)
-        
+        const keyTanggal = Object.keys(dataSchedule)
 
+        const pageStyle = css`
+                                background-color : #082032;
+                                color : white;
+                            `
         return (
-            <div>
-                {isLoading === true && <h2>Loading...</h2>}
-                {dataSchedule.length != 0 ? 
-                    dataTanggal.map(tanggal => {
-                        return(
-                            <div>{tanggal}</div>
+            <Router>
+                <div css={pageStyle}>
+                    {/** Load data from API */}
+                    {isLoading === true && <h2>Loading...</h2>}
+
+                    {/** If data is not empty, show Schedule Dates */}
+                    {dataSchedule.length !== 0 ?
+                        keyTanggal.map(tanggal => {
+                            console.log(tanggal)
+                            return (
+                                <DayCard dates={tanggal} />
+                            )
+                        })
+                        : null}
+                    <hr />
+                    
+                    {/** Rendering Schedule Cards */}
+                    {dataSchedule.length !== 0 ? keyTanggal.map(tanggal => {
+                        const strTanggal = String(tanggal)
+                        const dataTanggalDetail = dataSchedule[strTanggal]
+
+                        return (
+                            <Routes>
+                                <Route path={strTanggal} element={
+                                    <ScheduleCard
+                                        tanggalSchedule={strTanggal}
+                                        details={dataTanggalDetail}
+                                    />}
+                                />
+                            </Routes>
                         )
-                    })
-                : null}
+                    }) : null}
+                </div>
+            </Router>
 
-                {/** }
-                {dataSchedule.length != 0 ? datas.map(item => {
-                    return(
-                        <ScheduleCard 
-                            instructor={item.instructor}
-                            classDifficulty={item.classDifficulty}
-                            className={item.className}
-                            classType={item.classType}
-                            classDuration={item.classDifficulty}
-                            locationSchedule={item.locationSchedule}
-                            timeCategory={item.timeCategory}
-                            timeSchedule={item.timeSchedule}
-                            />
-                    )
-                }) : null
-                }
-                { */}
-
-            </div>
         )
     }
 }
