@@ -7,6 +7,7 @@ import {
 } from 'react-router-dom'
 import ScheduleCard from "./ScheduleCard"
 import DayCard from "./DayCard"
+import Button from 'react-bootstrap/Button'
 
 /**@jsxRuntime classic */
 /**@jsx jsx */
@@ -46,10 +47,12 @@ class Contents extends React.Component {
     render() {
         const { isLoading, dataSchedule } = this.state
         const keyTanggal = Object.keys(dataSchedule)
-
+        console.log(keyTanggal)
         const pageStyle = css`
                                 background-color : #082032;
                                 color : white;
+                                margin-left : 10px;
+                                margin-right : 10px;
                             `
         return (
             <Router>
@@ -57,14 +60,17 @@ class Contents extends React.Component {
                     {/** Load data from API */}
                     {isLoading === true && <h2>Loading...</h2>}
 
-                    {/** If data is not empty, show Schedule Dates */}
-                    {dataSchedule.length !== 0 ?
+                    {/** If data is not empty, show Schedule Dates button */}
+                    {/* {dataSchedule.length !== 0 ? 
                         keyTanggal.map(tanggal => {
-                            console.log(tanggal)
                             return (
-                                <DayCard dates={tanggal} />
+                                <DayCard dates={tanggal}/>
                             )
                         })
+                        : null} */}
+                    
+                    {dataSchedule.length !== 0 ? 
+                        <DayCard dates={keyTanggal} />
                         : null}
                     <hr />
                     
