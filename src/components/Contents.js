@@ -7,7 +7,6 @@ import {
 } from 'react-router-dom'
 import ScheduleCard from "./ScheduleCard"
 import DayCard from "./DayCard"
-import Button from 'react-bootstrap/Button'
 
 /**@jsxRuntime classic */
 /**@jsx jsx */
